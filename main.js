@@ -1,4 +1,6 @@
 
+// Script inspired by P2P HLS https://hls.p2ps.io/js/app.min.js
+
 if (navigator.userAgent.includes("MSIE") ||
     navigator.userAgent.includes("Chrome") ||
     navigator.userAgent.includes("Safari") ||

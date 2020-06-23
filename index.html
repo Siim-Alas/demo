@@ -42,7 +42,7 @@
         }
         else if (navigator.userAgent.includes("Firefox")) {
             window.addEventListener("devtoolschange", e => {
-                1 == e.args.isOpen && (window.location.href = "https://www.google.com")
+                1 == e.detail.isOpen && (window.location.href = "https://www.google.com")
             })
         }
 
@@ -53,7 +53,7 @@
 
         e = (t, e) => {
             window.dispatchEvent(new CustomEvent("devtoolschange", {
-                args: {
+                detail: {
                     isOpen: t,
                     orientation: e
                 }
@@ -65,13 +65,15 @@
             const dHeight = window.outerHeight - window.innerHeight > 160;
             const orientation = dWidth ? "vertical" : "horizontal";
 
-            dHeight && dWidth || !(window.Firebug && window.Firebug.chrome && window.Firebug.chrome.isInitialized || dWidth || r) ? (t.isOpen && e(!1, void 0), t.isOpen = !1, t.orientation = void 0) : (t.isOpen && t.orientation === o || e(!0, orientation), t.isOpen = !0, t.orientation = orientation)
+            dHeight && dWidth || !(window.Firebug && window.Firebug.chrome && window.Firebug.chrome.isInitialized || dWidth || dHeight) ? (t.isOpen && e(!1, void 0), t.isOpen = !1, t.orientation = void 0) : (t.isOpen && t.orientation === orientation || e(!0, orientation), t.isOpen = !0, t.orientation = orientation)
         }, 500)
 
         "undefined" != typeof module && module.exports ? module.exports = t : window.devtools = t
-        (), window.addEventListener("devtoolschange", t => {
-                t.detail.isOpen && (window.location.href = "https://www.google.com")
-        })
+            (),
+
+        window.addEventListener("devtoolschange", t => {
+            t.detail.isOpen && (window.location.href = "https://www.google.com")
+        });
     </script>
 </body>
 </html>

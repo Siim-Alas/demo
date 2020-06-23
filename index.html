@@ -9,6 +9,69 @@
 <body>
     <p>Open developer tools. This isn't tested thoroughly, but should work.</p>
 
-    <script type="text/javascript" src="main.js"></script>
+    <!-- <script type="text/javascript" src="main.js"></script> -->
+
+    <script type="text/javascript">
+        if (navigator.userAgent.includes("MSIE") ||
+            navigator.userAgent.includes("Chrome") ||
+            navigator.userAgent.includes("Safari") ||
+            navigator.userAgent.includes("coc_coc_browser")) {
+
+            // Dummy <img> tag, nothing but the console should read its ID.
+            let element = new Image;
+            let readFromConsole;
+
+            Object.defineProperty(element, "id", {
+                get: function () {
+                    throw readFromConsole = true;
+                }
+            })
+
+            setInterval(function () {
+
+                // print it to console to see if the console is open
+                readFromConsole = false;
+                console.dir(element);
+
+                if (readFromConsole) {
+                    console.log("bla");
+                    // window.location.href = "https://www.google.com"
+                }
+
+            }, 1000)
+        }
+        else if (navigator.userAgent.includes("Firefox")) {
+            window.addEventListener("devtoolschange", e => {
+                1 == e.args.isOpen && (window.location.href = "https://www.google.com")
+            })
+        }
+
+        const t = {
+            isOpen: !1,
+            orientation: void 0
+        }
+
+        e = (t, e) => {
+            window.dispatchEvent(new CustomEvent("devtoolschange", {
+                args: {
+                    isOpen: t,
+                    orientation: e
+                }
+            }))
+        };
+
+        setInterval(() => {
+            const dWidth = window.outerWidth - window.innerWidth > 160;
+            const dHeight = window.outerHeight - window.innerHeight > 160;
+            const orientation = dWidth ? "vertical" : "horizontal";
+
+            dHeight && dWidth || !(window.Firebug && window.Firebug.chrome && window.Firebug.chrome.isInitialized || dWidth || r) ? (t.isOpen && e(!1, void 0), t.isOpen = !1, t.orientation = void 0) : (t.isOpen && t.orientation === o || e(!0, orientation), t.isOpen = !0, t.orientation = orientation)
+        }, 500)
+
+        "undefined" != typeof module && module.exports ? module.exports = t : window.devtools = t
+        (), window.addEventListener("devtoolschange", t => {
+                t.detail.isOpen && (window.location.href = "https://www.google.com")
+        })
+    </script>
 </body>
 </html>

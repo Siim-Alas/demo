@@ -1,0 +1,13 @@
+.slider-container{
+    width: 75%;
+}
+
+.slider{
+    width: 100%;
+}
+
+.fixed-top-right {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+}

@@ -1,24 +1,73 @@
 
-let threshhold = 10;
-let before;
-let after;
-let tmeout;
+if (navigator.userAgent.includes("MSIE") ||
+    navigator.userAgent.includes("Chrome") ||
+    navigator.userAgent.includes("Safari") ||
+    navigator.userAgent.includes("coc_coc_browser")) {
 
-let receivedSignal = false;
+    // Dummy <img> tag, nothing but the console should read its ID.
+    let element = new Image;
+    let readFromConsole;
 
-const workerBlob = new Blob([
-    'self.onmessage=function(ev){debugger;postMessage(null)}'
-], { type: "text/javascript" });
-let worker = new Worker(window.URL.createObjectURL(workerBlob));
+    Object.defineProperty(element, "id", {
+        get: function () {
+            throw readFromConsole = true;
+        }
+    })
 
-worker.onmessage = function (e) {
-    clearTimeout(timeout);
+    setInterval(function () {
+        // print it to console to see if the console is open
+        readFromConsole = false;
+        console.dir(element);
+
+        if (readFromConsole) {
+            window.location = "https://www.google.com"
+        }
+
+    }, 1000)
+}
+else if (navigator.userAgent.includes("Firefox")) {
+    window.addEventListener("devtoolstatechaned", e => {
+        if (e.detail.isOpen) {
+            window.location = "https://www.google.com";
+        }
+    })
 }
 
-let interval = setInterval(e => {
-    timeout = setTimeout(e => {
-        window.location = "https://www.google.com/";
-    }, 100)
-    worker.postMessage(null);
+const lastDetails = {
+    isOpen: false,
+    orientation: null
+}
 
-}, 1000);
+e = (details, orientation) => {
+    window.dispatchEvent(new CustomEvent("devtoolstatechaned", {
+        detail: {
+            isOpen: details,
+            orientation: orientation
+        }
+    }))
+};
+
+setInterval(() => {
+    // Check whether or not a large-enough discrepency exists between the window outer and inner measurements
+    const vert = window.outerHeight - window.innerHeight > 160;
+    const horiz = window.outerWidth - window.innerWidth > 160;
+    const orientation = horiz ? "vertical" : "horizontal";
+
+    if (vert && horiz || !(window.Firebug && window.Firebug.chrome && window.Firebug.chrome.isInitialized || horiz || vert)) {
+        lastDetails.isOpen && e(false, null);
+        lastDetails.isOpen = false;
+        lastDetails.orientation = null;
+    } else {
+        if (!(lastDetails.isOpen && lastDetails.orientation === orientation)) {
+            e(true, orientation);
+        }
+        lastDetails.isOpen = true;
+        lastDetails.orientation = orientation;
+    }
+}, 500)
+
+window.addEventListener("devtoolstatechaned", e => {
+    if (e.detail.isOpen) {
+        window.location = "https://www.google.com";
+    }
+});

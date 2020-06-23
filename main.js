@@ -4,23 +4,21 @@ let before;
 let after;
 let tmeout;
 
-const worker = new Worker("worker.js");
+let receivedSignal = false;
+
+const workerBlob = new Blob([
+    'self.onmessage=function(ev){debugger;postMessage(null)}'
+], { type: "text/javascript" });
+let worker = new Worker(window.URL.createObjectURL(workerBlob));
+
+worker.onmessage = function (e) {
+    clearTimeout(timeout);
+}
 
 let interval = setInterval(e => {
-
-//    before = new Date().getTime();
-//    // if devtoolas are open, then script pauses
-//    debugger;
-//    after = new Date().getTime();
-
-//    if (after - before > threshhold) {
-//        window.location = "https://www.google.com/";
-//    }
-//    timeout = setTimeout(e => {
-//        window.location = "https://www.google.com/";
-//    }, 100)
-//    debugger;
-//    clearTimeout(timeout);
-
+    timeout = setTimeout(e => {
+        window.location = "https://www.google.com/";
+    }, 100)
+    worker.postMessage(null);
 
 }, 1000);

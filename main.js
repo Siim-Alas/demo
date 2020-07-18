@@ -1,39 +1,28 @@
 
-// Script inspired by P2P HLS https://hls.p2ps.io/js/app.min.js
 
-if (navigator.userAgent.indexOf("MSIE") != -1 ||
-    navigator.userAgent.indexOf("Chrome") != -1 ||
-    navigator.userAgent.indexOf("Safari") != -1 ||
-    navigator.userAgent.indexOf("coc_coc_browser") != -1) {
+var viewer = OpenSeadragon({
+    id: "openseadragon1",
+    prefixUrl: "openseadragon-bin-2.4.2/openseadragon-bin-2.4.2/images/",
+    tileSources: "talvine_maastik.xml"
+});
 
-    // Dummy <img> tag, nothing but the console should read its ID.
-    let element = new Image;
-    let readFromConsole;
 
-    Object.defineProperty(element, "id", {
-        get: function () {
-            throw readFromConsole = true;
-        }
-    })
 
-    setInterval(function () {
-        // Print it to console to see if the console is open
-        readFromConsole = false;
-        console.dir(element);
 
-        if (readFromConsole) {
-            window.location = "https://www.google.com";
-        }
-
-    }, 1000)
-}
-
-setInterval(function () {
-    // Check whether or not a large-enough discrepency exists between the window outer and inner measurements
-    const vert = window.outerHeight - window.innerHeight > 160;
-    const horiz = window.outerWidth - window.innerWidth > 160;
-
-    if (!(vert && horiz || !(window.Firebug && window.Firebug.chrome && window.Firebug.chrome.isInitialized || horiz || vert))) {
-        window.location = "https://www.google.com";
-    }
-}, 500)
+//fileInput.addEventListener("change", function () {
+//    console.log(this.files);
+//    if (this.files != null && this.files[0] != null) {
+//        let file = this.files[0];
+//
+//        let formData = new FormData();
+//        formData.append("image", file);
+//
+//        fetch('https://srv2.zoomable.ca/api/image', {
+//            method: 'POST',
+//            mode: 'no-cors',
+//            body: formData,
+//        }).then(function (response) {
+//            console.log(response.json());
+//        });
+//    }
+//});

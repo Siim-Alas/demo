@@ -2,7 +2,7 @@
 var viewer = OpenSeadragon({
     id: "openseadragon1",
     prefixUrl: "Javascript/dist/openseadragon-bin-2.4.2/images/",
-    tileSources: 'Images/output/Bernardo_Bellotto,_il_Canaletto_-_View_of_Vienna_from_the_Belvedere.xml'
+    tileSources: 'Images/output/2196386940.xml'
 });
 
 document.getElementById("fileInput").addEventListener("change", function () {

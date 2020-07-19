@@ -1,4 +1,20 @@
 
-body{
-    
+body {
+    overflow-x: hidden;
+}
+
+#openseadragon1 {
+    width: 100vw;
+    height: 80vh;
+    margin: auto;
+}
+
+.fixed-bottom-left {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+}
+
+.bring-to-front {
+    z-index: 100;
 }

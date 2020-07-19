@@ -1,12 +1,15 @@
 
-var viewer = OpenSeadragon({
+let viewer = OpenSeadragon({
     id: "openseadragon1",
     prefixUrl: "Javascript/dist/openseadragon-bin-2.4.2/images/",
     tileSources: 'Images/output/2196386940.xml'
 });
 
+let spinner = document.getElementById("spinner");
+
 document.getElementById("fileInput").addEventListener("change", function () {
     if (this.files != null && this.files[0] != null) {
+        spinner.style.display = "block";
         let _this = this;
         buildTilePyramidAndXML(
             this.files[0],
@@ -23,6 +26,7 @@ document.getElementById("fileInput").addEventListener("change", function () {
                     saveAs(blob, "output.zip");
                 });
 
+                spinner.style.display = "none";
                 console.log(tiles);
         }, 256);
     }

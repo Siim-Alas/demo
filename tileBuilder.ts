@@ -95,10 +95,6 @@ function buildTiles(level: level, prefix: string, fileExtension: string, tileSiz
                 0, 0,
                 sliceWidth, sliceHeight);
 
-            let img = document.createElement('img');
-            img.src = tileCanvas.toDataURL();
-            document.body.appendChild(img);
-
             tiles.push({
                 name: `${prefix}${i}_${j}${fileExtension}`,
                 canvas: tileCanvas

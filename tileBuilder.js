@@ -60,9 +60,6 @@ function buildTiles(level, prefix, fileExtension, tileSize) {
             tileCanvas.width = sliceWidth;
             tileCanvas.height = sliceHeight;
             tileCanvas.getContext('2d').drawImage(sourceContext.canvas, i * tileSize, j * tileSize, sliceWidth, sliceHeight, 0, 0, sliceWidth, sliceHeight);
-            var img = document.createElement('img');
-            img.src = tileCanvas.toDataURL();
-            document.body.appendChild(img);
             tiles.push({
                 name: "" + prefix + i + "_" + j + fileExtension,
                 canvas: tileCanvas

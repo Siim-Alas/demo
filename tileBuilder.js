@@ -50,10 +50,19 @@ function buildTiles(level, prefix, fileExtension, tileSize) {
     var rows = Math.ceil(level.height / tileSize);
     var tiles = [];
     var tileCanvas;
+    var sliceWidth;
+    var sliceHeight;
     for (var i = 0; i < columns; i++) {
         for (var j = 0; j < rows; j++) {
+            sliceWidth = (i == columns - 1) ? level.width - i * tileSize : tileSize;
+            sliceHeight = (j == rows - 1) ? level.height - j * tileSize : tileSize;
             tileCanvas = document.createElement('canvas');
-            tileCanvas.getContext('2d').drawImage(sourceContext.canvas, i * tileSize, j * tileSize, tileSize, tileSize, 0, 0, tileSize, tileSize);
+            tileCanvas.width = sliceWidth;
+            tileCanvas.height = sliceHeight;
+            tileCanvas.getContext('2d').drawImage(sourceContext.canvas, i * tileSize, j * tileSize, sliceWidth, sliceHeight, 0, 0, sliceWidth, sliceHeight);
+            var img = document.createElement('img');
+            img.src = tileCanvas.toDataURL();
+            document.body.appendChild(img);
             tiles.push({
                 name: "" + prefix + i + "_" + j + fileExtension,
                 canvas: tileCanvas

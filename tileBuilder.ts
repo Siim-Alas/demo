@@ -76,15 +76,29 @@ function buildTiles(level: level, prefix: string, fileExtension: string, tileSiz
     let tiles: tile[] = [];
     let tileCanvas: HTMLCanvasElement;
 
+    let sliceWidth: number;
+    let sliceHeight: number;
+
     for (let i = 0; i < columns; i++) {
         for (let j = 0; j < rows; j++) {
+            sliceWidth = (i == columns - 1) ? level.width - i * tileSize : tileSize;
+            sliceHeight = (j == rows - 1) ? level.height - j * tileSize : tileSize;
+
             tileCanvas = document.createElement('canvas');
+            tileCanvas.width = sliceWidth;
+            tileCanvas.height = sliceHeight;
+
             tileCanvas.getContext('2d').drawImage(
                 sourceContext.canvas,
                 i * tileSize, j * tileSize,
-                tileSize, tileSize,
+                sliceWidth, sliceHeight,
                 0, 0,
-                tileSize, tileSize);
+                sliceWidth, sliceHeight);
+
+            let img = document.createElement('img');
+            img.src = tileCanvas.toDataURL();
+            document.body.appendChild(img);
+
             tiles.push({
                 name: `${prefix}${i}_${j}${fileExtension}`,
                 canvas: tileCanvas

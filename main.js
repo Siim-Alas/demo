@@ -2,10 +2,7 @@
 var viewer = OpenSeadragon({
     id: "openseadragon1",
     prefixUrl: "openseadragon-bin-2.4.2/openseadragon-bin-2.4.2/images/",
-    tileSources: {
-        type: 'image',
-        url: 'Images/profiilipilt/profiilipilt.xml'
-    }
+    tileSources: 'Images/profiilipilt/profiilipilt.xml'
 });
 
 document.getElementById("fileInput").addEventListener("change", function () {

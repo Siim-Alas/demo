@@ -101,7 +101,7 @@ function buildTilePyramidFromFile(file: File, tileSize: number, callback: (tiles
     let tiles: tile[] = [];
     let reader: FileReader = new FileReader();
 
-    let folderName: string = `${file.name.substring(0, file.name.lastIndexOf('.'))}_files`;
+    let folderName: string = `${file.name.substring(0, file.name.lastIndexOf('.'))}`;
     let fileExtension: string = file.name.substring(file.name.lastIndexOf('.'));
 
     reader.onload = function () {
@@ -121,9 +121,10 @@ function buildTilePyramidFromFile(file: File, tileSize: number, callback: (tiles
 function buildXML(file: File, tileSize: number, height: number, width: number) {
     let xmlString: string = 
 `<?xml version="1.0" encoding="UTF-8"?>
-<Image xmlns="http://schemas.microsoft.com/deepzoom/2008"
-        Format="${file.name.substring(file.name.lastIndexOf('.'))}" 
+<Image xmlns="http://schemas.microsoft.com/deepzoom/2009"
+        Format="${file.name.substring(file.name.lastIndexOf('.') + 1)}" 
         Overlap="0" 
+        ServerFormat="Default"
         TileSize="${tileSize}" >
     <Size Height="${height}" 
             Width="${width}"/>

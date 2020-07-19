@@ -67,7 +67,7 @@ function buildTilePyramidFromFile(file, tileSize, callback) {
     var levels;
     var tiles = [];
     var reader = new FileReader();
-    var folderName = file.name.substring(0, file.name.lastIndexOf('.')) + "_files";
+    var folderName = "" + file.name.substring(0, file.name.lastIndexOf('.'));
     var fileExtension = file.name.substring(file.name.lastIndexOf('.'));
     reader.onload = function () {
         img = document.createElement('img');
@@ -83,7 +83,7 @@ function buildTilePyramidFromFile(file, tileSize, callback) {
     reader.readAsDataURL(file);
 }
 function buildXML(file, tileSize, height, width) {
-    var xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Image xmlns=\"http://schemas.microsoft.com/deepzoom/2008\"\n        Format=\"" + file.name.substring(file.name.lastIndexOf('.')) + "\" \n        Overlap=\"0\" \n        TileSize=\"" + tileSize + "\" >\n    <Size Height=\"" + height + "\" \n            Width=\"" + width + "\"/>\n</Image>";
+    var xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Image xmlns=\"http://schemas.microsoft.com/deepzoom/2009\"\n        Format=\"" + file.name.substring(file.name.lastIndexOf('.') + 1) + "\" \n        Overlap=\"0\" \n        ServerFormat=\"Default\"\n        TileSize=\"" + tileSize + "\" >\n    <Size Height=\"" + height + "\" \n            Width=\"" + width + "\"/>\n</Image>";
     return xmlString;
     //let parser = new DOMParser();
     //return parser.parseFromString(xmlString, "text/xml");

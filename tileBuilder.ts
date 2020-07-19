@@ -101,7 +101,7 @@ function buildTilePyramidFromFile(file: File, tileSize: number, callback: (tiles
     let tiles: tile[] = [];
     let reader: FileReader = new FileReader();
 
-    let folderName: string = `${file.name.substring(0, file.name.lastIndexOf('.'))}`;
+    let folderName: string = `${file.name.substring(0, file.name.lastIndexOf('.'))}_files`;
     let fileExtension: string = file.name.substring(file.name.lastIndexOf('.'));
 
     reader.onload = function () {

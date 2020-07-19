@@ -67,7 +67,7 @@ function buildTilePyramidFromFile(file, tileSize, callback) {
     var levels;
     var tiles = [];
     var reader = new FileReader();
-    var folderName = "" + file.name.substring(0, file.name.lastIndexOf('.'));
+    var folderName = file.name.substring(0, file.name.lastIndexOf('.')) + "_files";
     var fileExtension = file.name.substring(file.name.lastIndexOf('.'));
     reader.onload = function () {
         img = document.createElement('img');

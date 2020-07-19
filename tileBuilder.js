@@ -27,8 +27,8 @@ function buildLevels(image) {
     // We build smaller levels until either width or height becomes
     // 1 pixel wide.
     while (currentWidth > 1 && currentHeight > 1) {
-        currentWidth = Math.floor(currentWidth / 2);
-        currentHeight = Math.floor(currentHeight / 2);
+        currentWidth = Math.ceil(currentWidth / 2);
+        currentHeight = Math.ceil(currentHeight / 2);
         var smallCanvas = document.createElement("canvas");
         var smallContext = smallCanvas.getContext("2d");
         smallCanvas.width = currentWidth;

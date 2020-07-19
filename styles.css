@@ -1,20 +1,8 @@
 
-body {
-    overflow-x: hidden;
-}
-
-#openseadragon1 {
+.full-page-container {
     width: 100vw;
-    height: 80vh;
+    height: 100vh;
     margin: auto;
-}
-
-.fixed-bottom-left {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-}
-
-.bring-to-front {
-    z-index: 100;
+    display: flex;
+    flex-direction: column;
 }

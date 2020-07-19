@@ -2,7 +2,8 @@
 let viewer = OpenSeadragon({
     id: "openseadragon1",
     prefixUrl: "Javascript/dist/openseadragon-bin-2.4.2/images/",
-    tileSources: 'Images/output/2196386940.xml'
+    tileSources: 'Images/output/2196386940.xml', 
+    useCanvas: navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? false : true
 });
 
 let spinner = document.getElementById("spinner");

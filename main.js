@@ -4,26 +4,29 @@ var viewer = OpenSeadragon({
     prefixUrl: "openseadragon-bin-2.4.2/openseadragon-bin-2.4.2/images/",
     tileSources: {
         type: 'image',
-        url: 'Taxus_uitgezaaid_in_een_knotwilg._28-07-2019._(d.j.b)._08.jpg'
+        url: 'Images/profiilipilt/profiilipilt.xml'
     }
 });
 
 document.getElementById("fileInput").addEventListener("change", function () {
     if (this.files != null && this.files[0] != null) {
-        let img;
-        let levels;
+        let _this = this;
+        buildTilePyramidAndXML(
+            this.files[0],
+            function (xml, tiles) {
+                let zip = new JSZip();
 
-        let reader = new FileReader();
-        reader.onload = function () {
-            img = document.createElement('img');
-            img.src = reader.result;
-            img.onload = function () {
-                levels = buildLevels(img);
+                zip.file(`${_this.files[0].name.substring(0, _this.files[0].name.lastIndexOf('.'))}.xml`, xml);
 
-                console.log(levels);
-            };
-        };
+                for (t of tiles) {
+                    zip.file(t.name, t.canvas.toDataURL().split('base64,')[1], { base64: true });
+                }
 
-        reader.readAsDataURL(this.files[0]);
+                zip.generateAsync({ type: "blob" }).then(function (blob) {
+                    saveAs(blob, "output.zip");
+                });
+
+                console.log(tiles);
+        }, 256);
     }
 });

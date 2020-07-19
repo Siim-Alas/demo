@@ -2,7 +2,7 @@
 var viewer = OpenSeadragon({
     id: "openseadragon1",
     prefixUrl: "openseadragon-bin-2.4.2/openseadragon-bin-2.4.2/images/",
-    tileSources: 'Images/profiilipilt/profiilipilt.xml'
+    tileSources: 'Images/profiilipilt/talvine_maastik/talvine_maastik.xml'
 });
 
 document.getElementById("fileInput").addEventListener("change", function () {

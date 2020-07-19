@@ -42,16 +42,16 @@ function buildLevels(image: HTMLImageElement) {
     // is a lot faster at downsampling something it already has
     // downsampled before.
     levels[0].context2D = bigContext;
-    // We don't need the image anymore. Allows it to be GC.
-    // delete image;
 
-    // We build smaller levels until either width or height becomes
+    // We build smaller levels until both width and height become
     // 1 pixel wide.
+    let smallCanvas: HTMLCanvasElement;
+    let smallContext: CanvasRenderingContext2D;
     while (currentWidth > 1 || currentHeight > 1) {
         currentWidth = Math.ceil(currentWidth / 2);
         currentHeight = Math.ceil(currentHeight / 2);
-        let smallCanvas: HTMLCanvasElement = document.createElement("canvas");
-        let smallContext: CanvasRenderingContext2D = smallCanvas.getContext("2d");
+        smallCanvas = document.createElement("canvas");
+        smallContext = smallCanvas.getContext("2d");
         smallCanvas.width = currentWidth;
         smallCanvas.height = currentHeight;
         smallContext.drawImage(bigCanvas, 0, 0, currentWidth, currentHeight);

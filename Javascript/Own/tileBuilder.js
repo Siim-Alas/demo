@@ -1,102 +1,93 @@
-function buildLevels(image) {
-    var cvs = document.createElement('canvas');
-    var ctx = cvs.getContext('2d');
-    ctx.drawImage(image, 0, 0, 
-    /* IE8 fix since it has no naturalWidth and naturalHeight */
-    Object.prototype.hasOwnProperty.call(image, 'naturalWidth') ? image.naturalWidth : image.width, Object.prototype.hasOwnProperty.call(image, 'naturalHeight') ? image.naturalHeight : image.height);
-    var levels = [{
-            context2D: ctx,
-            /* IE8 fix since it has no naturalWidth and naturalHeight */
-            width: Object.prototype.hasOwnProperty.call(image, 'naturalWidth') ? image.naturalWidth : image.width,
-            height: Object.prototype.hasOwnProperty.call(image, 'naturalHeight') ? image.naturalHeight : image.height
-        }];
-    /* IE8 fix since it has no naturalWidth and naturalHeight */
-    var currentWidth = Object.prototype.hasOwnProperty.call(image, 'naturalWidth') ? image.naturalWidth : image.width;
-    var currentHeight = Object.prototype.hasOwnProperty.call(image, 'naturalHeight') ? image.naturalHeight : image.height;
-    var bigCanvas = document.createElement("canvas");
-    var bigContext = bigCanvas.getContext("2d");
-    bigCanvas.width = currentWidth;
-    bigCanvas.height = currentHeight;
-    bigContext.drawImage(image, 0, 0, currentWidth, currentHeight);
-    // We cache the context of the highest level because the browser
-    // is a lot faster at downsampling something it already has
-    // downsampled before.
-    levels[0].context2D = bigContext;
-    // We build smaller levels until both width and height become
-    // 1 pixel wide.
-    var smallCanvas;
-    var smallContext;
-    while (currentWidth > 1 || currentHeight > 1) {
-        currentWidth = Math.ceil(currentWidth / 2);
-        currentHeight = Math.ceil(currentHeight / 2);
-        smallCanvas = document.createElement("canvas");
-        smallContext = smallCanvas.getContext("2d");
-        smallCanvas.width = currentWidth;
-        smallCanvas.height = currentHeight;
-        smallContext.drawImage(bigCanvas, 0, 0, currentWidth, currentHeight);
-        levels.splice(0, 0, {
-            context2D: smallContext,
+var TileBuilder = /** @class */ (function () {
+    function TileBuilder(options) {
+        this.file = options.file;
+        this.folderName = this.file.name.substring(0, this.file.name.lastIndexOf('.')) + "_files";
+        this.fileExtension = this.file.name.substring(this.file.name.lastIndexOf('.'));
+        this.tileSize = options.tileSize;
+        this.overlap = options.overlap;
+        this.onTileBuilt = options.onTileBuilt;
+        this.onXMLBuilt = options.onXMLBuilt;
+        this.onComplete = options.onComplete;
+        var _this = this;
+        var reader = new FileReader();
+        reader.onload = function () {
+            _this.image = document.createElement('img');
+            _this.image.onload = function () {
+                /* IE8 fix since it has no naturalWidth and naturalHeight */
+                _this.imageWidth = Object.prototype.hasOwnProperty.call(_this.image, 'naturalWidth') ? _this.image.naturalWidth : _this.image.width;
+                _this.imageHeight = Object.prototype.hasOwnProperty.call(_this.image, 'naturalHeight') ? _this.image.naturalHeight : _this.image.height;
+                _this.build();
+            };
+            _this.image.src = reader.result;
+        };
+        reader.readAsDataURL(this.file);
+    }
+    TileBuilder.prototype.build = function () {
+        var currentWidth = this.imageWidth;
+        var currentHeight = this.imageHeight;
+        var indexOfCurrentLevel = Math.ceil(Math.log(Math.max(currentWidth, currentHeight)) / Math.log(2));
+        var bigCanvas = document.createElement("canvas");
+        var bigContext = bigCanvas.getContext("2d");
+        bigCanvas.width = currentWidth;
+        bigCanvas.height = currentHeight;
+        bigContext.drawImage(this.image, 0, 0, currentWidth, currentHeight);
+        this.buildTilesOnLevel({
+            index: indexOfCurrentLevel--,
+            context2D: bigContext,
             width: currentWidth,
             height: currentHeight
         });
-        bigCanvas = smallCanvas;
-        bigContext = smallContext;
-    }
-    return levels;
-}
-function buildTiles(level, prefix, fileExtension, tileSize) {
-    var sourceContext = level.context2D;
-    var columns = Math.ceil(level.width / tileSize);
-    var rows = Math.ceil(level.height / tileSize);
-    var tiles = [];
-    var tileCanvas;
-    var sliceWidth;
-    var sliceHeight;
-    for (var i = 0; i < columns; i++) {
-        for (var j = 0; j < rows; j++) {
-            sliceWidth = (i == columns - 1) ? level.width - i * tileSize : tileSize;
-            sliceHeight = (j == rows - 1) ? level.height - j * tileSize : tileSize;
-            tileCanvas = document.createElement('canvas');
-            tileCanvas.width = sliceWidth;
-            tileCanvas.height = sliceHeight;
-            tileCanvas.getContext('2d').drawImage(sourceContext.canvas, i * tileSize, j * tileSize, sliceWidth, sliceHeight, 0, 0, sliceWidth, sliceHeight);
-            tiles.push({
-                name: "" + prefix + i + "_" + j + fileExtension,
-                canvas: tileCanvas
+        // We build smaller levels until both width and height become
+        // 1 pixel wide.
+        var smallCanvas;
+        var smallContext;
+        while (currentWidth > 1 || currentHeight > 1) {
+            currentWidth = Math.ceil(currentWidth / 2);
+            currentHeight = Math.ceil(currentHeight / 2);
+            smallCanvas = document.createElement("canvas");
+            smallContext = smallCanvas.getContext("2d");
+            smallCanvas.width = currentWidth;
+            smallCanvas.height = currentHeight;
+            smallContext.drawImage(bigCanvas, 0, 0, currentWidth, currentHeight);
+            this.buildTilesOnLevel({
+                index: indexOfCurrentLevel--,
+                context2D: smallContext,
+                width: currentWidth,
+                height: currentHeight
             });
+            bigCanvas = smallCanvas;
+            bigContext = smallContext;
         }
-    }
-    return tiles;
-}
-function buildTilePyramidFromFile(file, tileSize, callback) {
-    var img;
-    var levels;
-    var tiles = [];
-    var reader = new FileReader();
-    var folderName = file.name.substring(0, file.name.lastIndexOf('.')) + "_files";
-    var fileExtension = file.name.substring(file.name.lastIndexOf('.'));
-    reader.onload = function () {
-        img = document.createElement('img');
-        img.src = reader.result;
-        img.onload = function () {
-            levels = buildLevels(img);
-            for (var i = 0; i < levels.length; i++) {
-                tiles = tiles.concat(buildTiles(levels[i], folderName + "/" + i + "/", fileExtension, tileSize));
-            }
-            callback(tiles, levels[levels.length - 1].height, levels[levels.length - 1].width);
-        };
+        this.onXMLBuilt(this.buildXML());
+        this.onComplete();
     };
-    reader.readAsDataURL(file);
-}
-function buildXML(file, tileSize, height, width) {
-    var xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Image xmlns=\"http://schemas.microsoft.com/deepzoom/2009\"\n        Format=\"" + file.name.substring(file.name.lastIndexOf('.') + 1) + "\" \n        Overlap=\"0\" \n        ServerFormat=\"Default\"\n        TileSize=\"" + tileSize + "\" >\n    <Size Height=\"" + height + "\" \n            Width=\"" + width + "\"/>\n</Image>";
-    return xmlString;
-    //let parser = new DOMParser();
-    //return parser.parseFromString(xmlString, "text/xml");
-}
-function buildTilePyramidAndXML(file, callback, tileSize) {
-    buildTilePyramidFromFile(file, tileSize, function (tiles, height, width) {
-        callback(buildXML(file, tileSize, height, width), tiles);
-    });
-}
+    TileBuilder.prototype.buildTilesOnLevel = function (level) {
+        var sourceContext = level.context2D;
+        var columns = Math.ceil(level.width / this.tileSize);
+        var rows = Math.ceil(level.height / this.tileSize);
+        var tileCanvas;
+        var sliceWidth;
+        var sliceHeight;
+        var prefix = this.folderName + "/" + level.index + "/";
+        for (var i = 0; i < columns; i++) {
+            for (var j = 0; j < rows; j++) {
+                sliceWidth = ((i == columns - 1) ? level.width - i * this.tileSize : this.tileSize + 1) + ((i > 0) ? 1 : 0);
+                sliceHeight = ((j == rows - 1) ? level.height - j * this.tileSize : this.tileSize + 1) + ((j > 0) ? 1 : 0);
+                tileCanvas = document.createElement('canvas');
+                tileCanvas.width = sliceWidth;
+                tileCanvas.height = sliceHeight;
+                tileCanvas.getContext('2d').drawImage(sourceContext.canvas, (i == 0) ? 0 : i * this.tileSize - this.overlap, (j == 0) ? 0 : j * this.tileSize - this.overlap, sliceWidth, sliceHeight, 0, 0, sliceWidth, sliceHeight);
+                this.onTileBuilt({
+                    name: "" + prefix + i + "_" + j + this.fileExtension,
+                    canvas: tileCanvas
+                });
+            }
+        }
+    };
+    TileBuilder.prototype.buildXML = function () {
+        var xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Image xmlns=\"http://schemas.microsoft.com/deepzoom/2009\"\n        Format=\"" + this.fileExtension.substring(1) + "\" \n        Overlap=\"" + this.overlap + "\" \n        ServerFormat=\"Default\"\n        TileSize=\"" + this.tileSize + "\" >\n    <Size Height=\"" + this.imageHeight + "\" \n            Width=\"" + this.imageWidth + "\"/>\n</Image>";
+        return xmlString;
+    };
+    return TileBuilder;
+}());
 //# sourceMappingURL=tileBuilder.js.map

@@ -49,9 +49,20 @@
                             Select an image file, and a zipped folder with the .xml and image files will be
                             downloaded to your computer.
                         </p>
-                        <input id="fileInput" type="file" />
-                        <div id="spinner" class="spinner-border" role="status" style="display: none;">
-                            <span class="sr-only">Loading...</span>
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label for="tileWidth" class="col-form-label">Tile Width:</label>
+                                <input type="text" class="form-control" id="tileWidth" value="256">
+
+                                <label for="overlap" class="col-form-label">Overlap:</label>
+                                <input type="text" class="form-control" id="overlap" value="1">
+                            </div>
+                        </div>
+                        <div class="flex-row">
+                            <input id="fileInput" type="file" />
+                            <div id="spinner" class="spinner-border" role="status" style="display: none;">
+                                <span class="sr-only">Loading...</span>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">

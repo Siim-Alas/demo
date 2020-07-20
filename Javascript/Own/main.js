@@ -7,7 +7,23 @@ let viewer = OpenSeadragon({
 
 let spinner = document.getElementById("spinner");
 
-document.getElementById("fileInput").addEventListener("change", function () {
+document.getElementById("updateViewerFileInput").addEventListener("change", function () {
+    if (this.files != null && this.files[0] != null) {
+        let reader = new FileReader();
+        reader.onload = function () {
+            viewer.open({
+                    type: 'image',
+                    url: reader.result,
+                    crossOriginPolicy: 'Anonymous',
+                    ajaxWithCredentials: false
+                }
+            );
+        }
+        reader.readAsDataURL(this.files[0]);
+    }
+});
+
+document.getElementById("createDZIFileInput").addEventListener("change", function () {
     if (this.files != null && this.files[0] != null) {
         spinner.style.display = "block";
         let _this = this;

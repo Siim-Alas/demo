@@ -14,7 +14,7 @@
         <!-- Button to triger modal -->
         <div class="pb-0 pt-1 px-4 bring-to-front d-flex w-100 flex-row justify-content-between">
             <p class="flex-grow-1">
-                <b>Attribution: </b>
+                <b>Attribution:</b>
                 Photo by Barney Britton, sourced from
                 <a href="https://www.dpreview.com/sample-galleries/1022560946/leica-m10-r-sample-gallery/2196386940"
                    target="_blank">dpreview.com</a>.
@@ -62,12 +62,13 @@
                                 <input type="text" class="form-control" id="overlap" value="1">
                             </div>
                         </div>
-                        <div class="flex-row">
+                        <div class="d-inline-flex">
                             <input id="createDZIFileInput" type="file" />
                             <div id="spinner" class="spinner-border" role="status" style="display: none;">
                                 <span class="sr-only">Loading...</span>
                             </div>
                         </div>
+                        <p class="text-muted" id="statusText"></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

@@ -149,7 +149,7 @@ class TileBuilder {
     }
     private buildXML() {
         let xmlString: string =
-            `<?xml version="1.0" encoding="UTF-8"?>
+`<?xml version="1.0" encoding="UTF-8"?>
 <Image xmlns="http://schemas.microsoft.com/deepzoom/2009"
         Format="${this.fileExtension.substring(1)}" 
         Overlap="${this.overlap}" 

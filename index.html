@@ -12,6 +12,14 @@
 <body>
     <div class="full-page-container">
         <div id="openseadragon1" class="flex-grow-1"></div>
+        <script>
+            OpenSeadragon({
+                id: "openseadragon1",
+                prefixUrl: "Javascript/dist/openseadragon-bin-2.4.2/images/",
+                tileSources: 'Images/output/2196386940.xml'
+            });
+        </script>
+
 
         <!-- Button to triger modal -->
         <div class="pb-0 pt-1 px-4 bring-to-front d-flex w-100 flex-row justify-content-between">

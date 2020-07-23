@@ -1,4 +1,4 @@
-import Image from "../dist/ImageJS/image.min.js";
+import Image from "Javascript/dist/ImageJS/image.min.js";
 var TileBuilder = /** @class */ (function () {
     function TileBuilder(options) {
         this.file = options.file;

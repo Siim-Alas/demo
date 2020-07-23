@@ -1,5 +1,5 @@
 
-import Image from "../dist/ImageJS/image.min.js";
+import Image from "Javascript/dist/ImageJS/image.min.js";
 
 interface ITileBuilderOptions {
     file: File;

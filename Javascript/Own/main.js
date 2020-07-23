@@ -3,8 +3,7 @@ window.addEventListener("load", function () {
     let viewer = OpenSeadragon({
         id: "openseadragon1",
         prefixUrl: "Javascript/dist/openseadragon-bin-2.4.2/images/",
-        tileSources: 'Images/output/2196386940.xml',
-        immediateRender: true
+        tileSources: 'Images/output/2196386940.xml'
     });
 
     let spinner = document.getElementById("spinner");

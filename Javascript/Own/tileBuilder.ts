@@ -1,5 +1,7 @@
 
-import Image from "Javascript/dist/ImageJS/image.min.js";
+// Image-JS creates a window.IJS object.
+// @ts-ignore
+const IJSImage = IJS.Image;
 
 interface ITileBuilderOptions {
     file: File;
@@ -22,7 +24,7 @@ interface ITile {
     canvas: HTMLCanvasElement;
 }
 
-export default class TileBuilder {
+class TileBuilder {
     private readonly file: File;
     private readonly folderName: string;
     private readonly fileExtension: string;
@@ -68,7 +70,7 @@ export default class TileBuilder {
         //reader.readAsDataURL(this.file);
 
         reader.onload = function () {
-            Image.load(reader.result).then(image => {
+            IJSImage.load(reader.result).then(image => {
                 console.log(image);
 
                 _this.build(image);
@@ -76,7 +78,8 @@ export default class TileBuilder {
         };
         reader.readAsArrayBuffer(this.file);
     }
-    public build(image: Image) {
+
+    public build(image) {
         //let currentWidth: number = this.imageWidth;
         //let currentHeight: number = this.imageHeight;
         //let indexOfCurrentLevel = Math.ceil(Math.log(Math.max(currentWidth, currentHeight)) / Math.log(2));
@@ -174,13 +177,15 @@ export default class TileBuilder {
         let xmlString: string =
 `<?xml version="1.0" encoding="UTF-8"?>
 <Image xmlns="http://schemas.microsoft.com/deepzoom/2009"
-        Format="${this.fileExtension.substring(1)}" 
-        Overlap="${this.overlap}" 
-        ServerFormat="Default"
-        TileSize="${this.tileSize}" >
-    <Size Height="${this.imageHeight}" 
-            Width="${this.imageWidth}"/>
+    Format="${this.fileExtension.substring(1)}" 
+    Overlap="${this.overlap}" 
+    ServerFormat="Default"
+    TileSize="${this.tileSize}" >
+<Size Height="${this.imageHeight}" 
+        Width="${this.imageWidth}"/>
 </Image>`;
         return xmlString;
     }
 }
+
+

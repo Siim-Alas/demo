@@ -1,4 +1,6 @@
-import Image from "Javascript/dist/ImageJS/image.min.js";
+// Image-JS creates a window.IJS object.
+// @ts-ignore
+var IJSImage = IJS.Image;
 var TileBuilder = /** @class */ (function () {
     function TileBuilder(options) {
         this.file = options.file;
@@ -23,7 +25,7 @@ var TileBuilder = /** @class */ (function () {
         //};
         //reader.readAsDataURL(this.file);
         reader.onload = function () {
-            Image.load(reader.result).then(function (image) {
+            IJSImage.load(reader.result).then(function (image) {
                 console.log(image);
                 _this.build(image);
             });
@@ -101,10 +103,9 @@ var TileBuilder = /** @class */ (function () {
         }
     };
     TileBuilder.prototype.buildXML = function () {
-        var xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Image xmlns=\"http://schemas.microsoft.com/deepzoom/2009\"\n        Format=\"" + this.fileExtension.substring(1) + "\" \n        Overlap=\"" + this.overlap + "\" \n        ServerFormat=\"Default\"\n        TileSize=\"" + this.tileSize + "\" >\n    <Size Height=\"" + this.imageHeight + "\" \n            Width=\"" + this.imageWidth + "\"/>\n</Image>";
+        var xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Image xmlns=\"http://schemas.microsoft.com/deepzoom/2009\"\n    Format=\"" + this.fileExtension.substring(1) + "\" \n    Overlap=\"" + this.overlap + "\" \n    ServerFormat=\"Default\"\n    TileSize=\"" + this.tileSize + "\" >\n<Size Height=\"" + this.imageHeight + "\" \n        Width=\"" + this.imageWidth + "\"/>\n</Image>";
         return xmlString;
     };
     return TileBuilder;
 }());
-export default TileBuilder;
 //# sourceMappingURL=tileBuilder.js.map

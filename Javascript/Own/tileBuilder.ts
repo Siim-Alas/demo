@@ -51,36 +51,38 @@ class TileBuilder {
 
         let _this = this;
         let reader = new FileReader();
-        //reader.onload = function () {
-        //    _this.image = document.createElement('img');
-        //    _this.image.onload = function () {
-        //        /* IE8 fix since it has no naturalWidth and naturalHeight */
-        //        _this.imageWidth = Object.prototype.hasOwnProperty.call(_this.image, 'naturalWidth') ? _this.image.naturalWidth : _this.image.width;
-        //        _this.imageHeight = Object.prototype.hasOwnProperty.call(_this.image, 'naturalHeight') ? _this.image.naturalHeight : _this.image.height;
-
-        //        _this.build();
-        //    };
-        //    _this.image.src = <string>reader.result;
-        //};
-        //reader.readAsDataURL(this.file);
 
         reader.onload = function () {
-            console.log(reader.result);
-            let dataView = new DataView(<ArrayBuffer>reader.result);
-            console.log(dataView);
-            let start = 8; // PNG headers are 8 bits long, there are 2 headers before idat
-            let arr = new Uint8ClampedArray(<ArrayBuffer>reader.result);
-            console.log(arr);
-            let imgData = new ImageData(arr, 1280);
-            console.log(imgData);
-            _this.imageHeight = imgData.height;
-            _this.imageWidth = imgData.width;
-            _this.build(imgData);
+            let image = document.createElement('img');
+            image.onload = function () {
+                /* IE8 fix since it has no naturalWidth and naturalHeight */
+                _this.imageWidth = Object.prototype.hasOwnProperty.call(image, 'naturalWidth') ? image.naturalWidth : image.width;
+                _this.imageHeight = Object.prototype.hasOwnProperty.call(image, 'naturalHeight') ? image.naturalHeight : image.height;
+
+                _this.build(image);
+            };
+            image.src = <string>reader.result;
         };
-        reader.readAsArrayBuffer(this.file);
+        reader.readAsDataURL(this.file);
+
+
+        //reader.onload = function () {
+        //    console.log(reader.result);
+        //    let dataView = new DataView(<ArrayBuffer>reader.result);
+        //    console.log(dataView);
+        //    let start = 8; // PNG headers are 8 bits long, there are 2 headers before idat
+        //    let arr = new Uint8ClampedArray(<ArrayBuffer>reader.result);
+        //    console.log(arr);
+        //    let imgData = new ImageData(arr, 1280);
+        //    console.log(imgData);
+        //    _this.imageHeight = imgData.height;
+        //    _this.imageWidth = imgData.width;
+        //    // _this.build(imgData);
+        //};
+        //reader.readAsArrayBuffer(this.file);
     }
 
-    public build(imageData: ImageData) {
+    public build(image: HTMLImageElement) {
         let currentWidth: number = this.imageWidth;
         let currentHeight: number = this.imageHeight;
         let indexOfCurrentLevel = Math.ceil(Math.log(Math.max(currentWidth, currentHeight)) / Math.log(2));
@@ -90,7 +92,7 @@ class TileBuilder {
 
         bigCanvas.width = currentWidth;
         bigCanvas.height = currentHeight;
-        bigContext.putImageData(imageData, 0, 0);
+        bigContext.drawImage(image, 0, 0);
 
         this.buildTilesOnLevel({
             index: indexOfCurrentLevel--,

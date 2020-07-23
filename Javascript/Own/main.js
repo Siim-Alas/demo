@@ -1,7 +1,5 @@
 
 window.addEventListener("load", function () {
-    document.getElementById("openseadragon1").style = `width=${0.9 * this.window.innerWidth}px;height=${0.7 * this.window.innerWidth}px;margin:auto;`;
-
     let viewer = OpenSeadragon({
         id: "openseadragon1",
         prefixUrl: "Javascript/dist/openseadragon-bin-2.4.2/images/",

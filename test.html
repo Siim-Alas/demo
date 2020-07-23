@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JS Tests</title>
+</head>
+<body>
+    <div id="openseadragon1" style="width: 800px; height: 600px;"></div>
+    <script src="Javascript/dist/openseadragon-bin-2.4.2/openseadragon.min.js"></script>
+    <script type="text/javascript">
+        var viewer = OpenSeadragon({
+            id: "openseadragon1",
+            prefixUrl: "Javascript/dist/openseadragon-bin-2.4.2/images/",
+            tileSources: "Images/output/2196386940.xml"
+        });
+    </script>
+</body>
+</html>

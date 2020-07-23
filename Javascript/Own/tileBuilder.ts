@@ -1,4 +1,6 @@
 
+import { Image } from "../dist/ImageJS/image.min.js";
+
 interface ITileBuilderOptions {
     file: File;
     tileSize: number;
@@ -20,7 +22,7 @@ interface ITile {
     canvas: HTMLCanvasElement;
 }
 
-class TileBuilder {
+export default class TileBuilder {
     private readonly file: File;
     private readonly folderName: string;
     private readonly fileExtension: string;
@@ -52,47 +54,51 @@ class TileBuilder {
         let _this = this;
         let reader = new FileReader();
 
+        //reader.onload = function () {
+        //    let image = document.createElement('img');
+        //    image.onload = function () {
+        //        /* IE8 fix since it has no naturalWidth and naturalHeight */
+        //        _this.imageWidth = Object.prototype.hasOwnProperty.call(image, 'naturalWidth') ? image.naturalWidth : image.width;
+        //        _this.imageHeight = Object.prototype.hasOwnProperty.call(image, 'naturalHeight') ? image.naturalHeight : image.height;
+
+        //        _this.build(image);
+        //    };
+        //    image.src = <string>reader.result;
+        //};
+        //reader.readAsDataURL(this.file);
+
         reader.onload = function () {
-            let image = document.createElement('img');
-            image.onload = function () {
-                /* IE8 fix since it has no naturalWidth and naturalHeight */
-                _this.imageWidth = Object.prototype.hasOwnProperty.call(image, 'naturalWidth') ? image.naturalWidth : image.width;
-                _this.imageHeight = Object.prototype.hasOwnProperty.call(image, 'naturalHeight') ? image.naturalHeight : image.height;
+            Image.load(reader.result).then(image => {
+                console.log(image);
 
                 _this.build(image);
-            };
-            image.src = <string>reader.result;
+            });
         };
-        reader.readAsDataURL(this.file);
-
-
-        //reader.onload = function () {
-        //    console.log(reader.result);
-        //    let dataView = new DataView(<ArrayBuffer>reader.result);
-        //    console.log(dataView);
-        //    let start = 8; // PNG headers are 8 bits long, there are 2 headers before idat
-        //    let arr = new Uint8ClampedArray(<ArrayBuffer>reader.result);
-        //    console.log(arr);
-        //    let imgData = new ImageData(arr, 1280);
-        //    console.log(imgData);
-        //    _this.imageHeight = imgData.height;
-        //    _this.imageWidth = imgData.width;
-        //    // _this.build(imgData);
-        //};
-        //reader.readAsArrayBuffer(this.file);
+        reader.readAsArrayBuffer(this.file);
     }
+    public build(image: Image) {
+        //let currentWidth: number = this.imageWidth;
+        //let currentHeight: number = this.imageHeight;
+        //let indexOfCurrentLevel = Math.ceil(Math.log(Math.max(currentWidth, currentHeight)) / Math.log(2));
 
-    public build(image: HTMLImageElement) {
+        //let bigCanvas: HTMLCanvasElement = document.createElement("canvas");
+        //let bigContext: CanvasRenderingContext2D = bigCanvas.getContext("2d");
+
+        //bigCanvas.width = currentWidth;
+        //bigCanvas.height = currentHeight;
+        //bigContext.drawImage(image, 0, 0);
+
+        let bigCanvas: HTMLCanvasElement = image.getCanvas();
+        let bigContext: CanvasRenderingContext2D = bigCanvas.getContext('2d');
+
+        console.log(bigCanvas);
+
+        this.imageWidth = bigCanvas.width;
+        this.imageHeight = bigCanvas.height;
+
         let currentWidth: number = this.imageWidth;
         let currentHeight: number = this.imageHeight;
         let indexOfCurrentLevel = Math.ceil(Math.log(Math.max(currentWidth, currentHeight)) / Math.log(2));
-
-        let bigCanvas: HTMLCanvasElement = document.createElement("canvas");
-        let bigContext: CanvasRenderingContext2D = bigCanvas.getContext("2d");
-
-        bigCanvas.width = currentWidth;
-        bigCanvas.height = currentHeight;
-        bigContext.drawImage(image, 0, 0);
 
         this.buildTilesOnLevel({
             index: indexOfCurrentLevel--,

@@ -1,4 +1,6 @@
 
+import { TileBuilder } from "./tileBuilder.js";
+
 window.addEventListener("load", function () {
     let viewer = OpenSeadragon({
         id: "openseadragon1",

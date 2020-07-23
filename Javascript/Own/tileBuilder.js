@@ -1,3 +1,4 @@
+import { Image } from "../dist/ImageJS/image.min.js";
 var TileBuilder = /** @class */ (function () {
     function TileBuilder(options) {
         this.file = options.file;
@@ -10,41 +11,42 @@ var TileBuilder = /** @class */ (function () {
         this.onComplete = options.onComplete;
         var _this = this;
         var reader = new FileReader();
-        reader.onload = function () {
-            var image = document.createElement('img');
-            image.onload = function () {
-                /* IE8 fix since it has no naturalWidth and naturalHeight */
-                _this.imageWidth = Object.prototype.hasOwnProperty.call(image, 'naturalWidth') ? image.naturalWidth : image.width;
-                _this.imageHeight = Object.prototype.hasOwnProperty.call(image, 'naturalHeight') ? image.naturalHeight : image.height;
-                _this.build(image);
-            };
-            image.src = reader.result;
-        };
-        reader.readAsDataURL(this.file);
         //reader.onload = function () {
-        //    console.log(reader.result);
-        //    let dataView = new DataView(<ArrayBuffer>reader.result);
-        //    console.log(dataView);
-        //    let start = 8; // PNG headers are 8 bits long, there are 2 headers before idat
-        //    let arr = new Uint8ClampedArray(<ArrayBuffer>reader.result);
-        //    console.log(arr);
-        //    let imgData = new ImageData(arr, 1280);
-        //    console.log(imgData);
-        //    _this.imageHeight = imgData.height;
-        //    _this.imageWidth = imgData.width;
-        //    // _this.build(imgData);
+        //    let image = document.createElement('img');
+        //    image.onload = function () {
+        //        /* IE8 fix since it has no naturalWidth and naturalHeight */
+        //        _this.imageWidth = Object.prototype.hasOwnProperty.call(image, 'naturalWidth') ? image.naturalWidth : image.width;
+        //        _this.imageHeight = Object.prototype.hasOwnProperty.call(image, 'naturalHeight') ? image.naturalHeight : image.height;
+        //        _this.build(image);
+        //    };
+        //    image.src = <string>reader.result;
         //};
-        //reader.readAsArrayBuffer(this.file);
+        //reader.readAsDataURL(this.file);
+        reader.onload = function () {
+            Image.load(reader.result).then(function (image) {
+                console.log(image);
+                _this.build(image);
+            });
+        };
+        reader.readAsArrayBuffer(this.file);
     }
     TileBuilder.prototype.build = function (image) {
+        //let currentWidth: number = this.imageWidth;
+        //let currentHeight: number = this.imageHeight;
+        //let indexOfCurrentLevel = Math.ceil(Math.log(Math.max(currentWidth, currentHeight)) / Math.log(2));
+        //let bigCanvas: HTMLCanvasElement = document.createElement("canvas");
+        //let bigContext: CanvasRenderingContext2D = bigCanvas.getContext("2d");
+        //bigCanvas.width = currentWidth;
+        //bigCanvas.height = currentHeight;
+        //bigContext.drawImage(image, 0, 0);
+        var bigCanvas = image.getCanvas();
+        var bigContext = bigCanvas.getContext('2d');
+        console.log(bigCanvas);
+        this.imageWidth = bigCanvas.width;
+        this.imageHeight = bigCanvas.height;
         var currentWidth = this.imageWidth;
         var currentHeight = this.imageHeight;
         var indexOfCurrentLevel = Math.ceil(Math.log(Math.max(currentWidth, currentHeight)) / Math.log(2));
-        var bigCanvas = document.createElement("canvas");
-        var bigContext = bigCanvas.getContext("2d");
-        bigCanvas.width = currentWidth;
-        bigCanvas.height = currentHeight;
-        bigContext.drawImage(image, 0, 0);
         this.buildTilesOnLevel({
             index: indexOfCurrentLevel--,
             context2D: bigContext,
@@ -104,4 +106,5 @@ var TileBuilder = /** @class */ (function () {
     };
     return TileBuilder;
 }());
+export default TileBuilder;
 //# sourceMappingURL=tileBuilder.js.map

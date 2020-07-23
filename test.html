@@ -9,10 +9,13 @@
     <div id="openseadragon1" style="width: 800px; height: 600px;"></div>
     <script src="Javascript/dist/openseadragon-bin-2.4.2/openseadragon.min.js"></script>
     <script type="text/javascript">
-        var viewer = OpenSeadragon({
-            id: "openseadragon1",
-            prefixUrl: "Javascript/dist/openseadragon-bin-2.4.2/images/",
-            tileSources: "Images/output/2196386940.xml"
+        alert("test 1");
+        window.addEventListener("load", function () {
+            let viewer = OpenSeadragon({
+                id: "openseadragon1",
+                prefixUrl: "Javascript/dist/openseadragon-bin-2.4.2/images/",
+                tileSources: 'Images/output/2196386940.xml'
+            });
         });
     </script>
 </body>

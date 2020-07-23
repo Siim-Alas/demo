@@ -10,19 +10,33 @@ var TileBuilder = /** @class */ (function () {
         this.onComplete = options.onComplete;
         var _this = this;
         var reader = new FileReader();
+        //reader.onload = function () {
+        //    _this.image = document.createElement('img');
+        //    _this.image.onload = function () {
+        //        /* IE8 fix since it has no naturalWidth and naturalHeight */
+        //        _this.imageWidth = Object.prototype.hasOwnProperty.call(_this.image, 'naturalWidth') ? _this.image.naturalWidth : _this.image.width;
+        //        _this.imageHeight = Object.prototype.hasOwnProperty.call(_this.image, 'naturalHeight') ? _this.image.naturalHeight : _this.image.height;
+        //        _this.build();
+        //    };
+        //    _this.image.src = <string>reader.result;
+        //};
+        //reader.readAsDataURL(this.file);
         reader.onload = function () {
-            _this.image = document.createElement('img');
-            _this.image.onload = function () {
-                /* IE8 fix since it has no naturalWidth and naturalHeight */
-                _this.imageWidth = Object.prototype.hasOwnProperty.call(_this.image, 'naturalWidth') ? _this.image.naturalWidth : _this.image.width;
-                _this.imageHeight = Object.prototype.hasOwnProperty.call(_this.image, 'naturalHeight') ? _this.image.naturalHeight : _this.image.height;
-                _this.build();
-            };
-            _this.image.src = reader.result;
+            console.log(reader.result);
+            var dataView = new DataView(reader.result);
+            console.log(dataView);
+            var start = 8; // PNG headers are 8 bits long, there are 2 headers before idat
+            var arr = new Uint8ClampedArray(reader.result);
+            console.log(arr);
+            var imgData = new ImageData(arr, 1280);
+            console.log(imgData);
+            _this.imageHeight = imgData.height;
+            _this.imageWidth = imgData.width;
+            _this.build(imgData);
         };
-        reader.readAsDataURL(this.file);
+        reader.readAsArrayBuffer(this.file);
     }
-    TileBuilder.prototype.build = function () {
+    TileBuilder.prototype.build = function (imageData) {
         var currentWidth = this.imageWidth;
         var currentHeight = this.imageHeight;
         var indexOfCurrentLevel = Math.ceil(Math.log(Math.max(currentWidth, currentHeight)) / Math.log(2));
@@ -30,7 +44,7 @@ var TileBuilder = /** @class */ (function () {
         var bigContext = bigCanvas.getContext("2d");
         bigCanvas.width = currentWidth;
         bigCanvas.height = currentHeight;
-        bigContext.drawImage(this.image, 0, 0, currentWidth, currentHeight);
+        bigContext.putImageData(imageData, 0, 0);
         this.buildTilesOnLevel({
             index: indexOfCurrentLevel--,
             context2D: bigContext,

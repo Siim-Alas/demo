@@ -1,8 +1,4 @@
 
-// Image-JS creates a window.IJS object.
-// @ts-ignore
-const IJSImage = IJS.Image;
-
 interface ITileBuilderOptions {
     file: File;
     tileSize: number;
@@ -56,52 +52,31 @@ class TileBuilder {
         let _this = this;
         let reader = new FileReader();
 
-        //reader.onload = function () {
-        //    let image = document.createElement('img');
-        //    image.onload = function () {
-        //        /* IE8 fix since it has no naturalWidth and naturalHeight */
-        //        _this.imageWidth = Object.prototype.hasOwnProperty.call(image, 'naturalWidth') ? image.naturalWidth : image.width;
-        //        _this.imageHeight = Object.prototype.hasOwnProperty.call(image, 'naturalHeight') ? image.naturalHeight : image.height;
-
-        //        _this.build(image);
-        //    };
-        //    image.src = <string>reader.result;
-        //};
-        //reader.readAsDataURL(this.file);
-
         reader.onload = function () {
-            IJSImage.load(reader.result).then(image => {
-                console.log(image);
+            let image = document.createElement('img');
+            image.onload = function () {
+                /* IE8 fix since it has no naturalWidth and naturalHeight */
+                _this.imageWidth = Object.prototype.hasOwnProperty.call(image, 'naturalWidth') ? image.naturalWidth : image.width;
+                _this.imageHeight = Object.prototype.hasOwnProperty.call(image, 'naturalHeight') ? image.naturalHeight : image.height;
 
                 _this.build(image);
-            });
+            };
+            image.src = <string>reader.result;
         };
-        reader.readAsArrayBuffer(this.file);
+        reader.readAsDataURL(this.file);
     }
 
-    public build(image) {
-        //let currentWidth: number = this.imageWidth;
-        //let currentHeight: number = this.imageHeight;
-        //let indexOfCurrentLevel = Math.ceil(Math.log(Math.max(currentWidth, currentHeight)) / Math.log(2));
-
-        //let bigCanvas: HTMLCanvasElement = document.createElement("canvas");
-        //let bigContext: CanvasRenderingContext2D = bigCanvas.getContext("2d");
-
-        //bigCanvas.width = currentWidth;
-        //bigCanvas.height = currentHeight;
-        //bigContext.drawImage(image, 0, 0);
-
-        let bigCanvas: HTMLCanvasElement = image.getCanvas();
-        let bigContext: CanvasRenderingContext2D = bigCanvas.getContext('2d');
-
-        console.log(bigCanvas);
-
-        this.imageWidth = bigCanvas.width;
-        this.imageHeight = bigCanvas.height;
-
+    public build(image: HTMLImageElement) {
         let currentWidth: number = this.imageWidth;
         let currentHeight: number = this.imageHeight;
         let indexOfCurrentLevel = Math.ceil(Math.log(Math.max(currentWidth, currentHeight)) / Math.log(2));
+
+        let bigCanvas: HTMLCanvasElement = document.createElement("canvas");
+        let bigContext: CanvasRenderingContext2D = bigCanvas.getContext("2d");
+
+        bigCanvas.width = currentWidth;
+        bigCanvas.height = currentHeight;
+        bigContext.drawImage(image, 0, 0);
 
         this.buildTilesOnLevel({
             index: indexOfCurrentLevel--,

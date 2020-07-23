@@ -1,5 +1,5 @@
-var TileBuilder = /** @class */ (function () {
-    function TileBuilder(options) {
+var DZIBuilder = /** @class */ (function () {
+    function DZIBuilder(options) {
         this.file = options.file;
         this.folderName = this.file.name.substring(0, this.file.name.lastIndexOf('.')) + "_files";
         this.fileExtension = this.file.name.substring(this.file.name.lastIndexOf('.'));
@@ -22,7 +22,7 @@ var TileBuilder = /** @class */ (function () {
         };
         reader.readAsDataURL(this.file);
     }
-    TileBuilder.prototype.build = function (image) {
+    DZIBuilder.prototype.build = function (image) {
         var currentWidth = this.imageWidth;
         var currentHeight = this.imageHeight;
         var indexOfCurrentLevel = Math.ceil(Math.log(Math.max(currentWidth, currentHeight)) / Math.log(2));
@@ -61,7 +61,7 @@ var TileBuilder = /** @class */ (function () {
         this.onXMLBuilt(this.buildXML());
         this.onComplete();
     };
-    TileBuilder.prototype.buildTilesOnLevel = function (level) {
+    DZIBuilder.prototype.buildTilesOnLevel = function (level) {
         var sourceContext = level.context2D;
         var columns = Math.ceil(level.width / this.tileSize);
         var rows = Math.ceil(level.height / this.tileSize);
@@ -84,10 +84,10 @@ var TileBuilder = /** @class */ (function () {
             }
         }
     };
-    TileBuilder.prototype.buildXML = function () {
+    DZIBuilder.prototype.buildXML = function () {
         var xmlString = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Image xmlns=\"http://schemas.microsoft.com/deepzoom/2009\"\n    Format=\"" + this.fileExtension.substring(1) + "\" \n    Overlap=\"" + this.overlap + "\" \n    ServerFormat=\"Default\"\n    TileSize=\"" + this.tileSize + "\" >\n<Size Height=\"" + this.imageHeight + "\" \n        Width=\"" + this.imageWidth + "\"/>\n</Image>";
         return xmlString;
     };
-    return TileBuilder;
+    return DZIBuilder;
 }());
-//# sourceMappingURL=tileBuilder.js.map
+//# sourceMappingURL=DZIBuilder.js.map

@@ -1,5 +1,5 @@
 
-interface ITileBuilderOptions {
+interface IDZIBuilderOptions {
     file: File;
     tileSize: number;
     overlap: number;
@@ -20,7 +20,7 @@ interface ITile {
     canvas: HTMLCanvasElement;
 }
 
-class TileBuilder {
+class DZIBuilder {
     private readonly file: File;
     private readonly folderName: string;
     private readonly fileExtension: string;
@@ -32,11 +32,10 @@ class TileBuilder {
     private readonly onXMLBuilt: (xml: string) => void;
     private readonly onComplete: () => void;
 
-    // private image: HTMLImageElement;
     private imageWidth: number;
     private imageHeight: number;
 
-    public constructor(options: ITileBuilderOptions) {
+    public constructor(options: IDZIBuilderOptions) {
         this.file = options.file;
 
         this.folderName = `${this.file.name.substring(0, this.file.name.lastIndexOf('.'))}_files`;

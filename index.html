@@ -14,10 +14,13 @@
             <p>
                 The viewer is now embedded in an Iframe tag.
             </p>
-            <button type="button" class="btn btn-primary" onclick="goFullScreen(document.getElementById('1'));">
-                Fullscreen
-            </button>
-            <iframe id="1" src="https://dzigallerystorage.z6.web.core.windows.net/" height="600" style="margin:auto;width:100%;"></iframe>
+            <div style="position: relative">
+                <button type="button" class="dropbtn text-white fsbtn p-1" onclick="goFullScreen(document.getElementById('1'));">
+                    <span class="iconify" data-icon="oi:fullscreen-enter" data-inline="false"></span>
+                </button>
+                <iframe id="1" src="https://dzigallerystorage.z6.web.core.windows.net/"
+                        height="600" style="margin:auto;width:100%;"></iframe>
+            </div>
             <p>
                 <b>Attribution:</b>
                 Photo by Barney Britton, sourced from
@@ -26,17 +29,20 @@
 
                 The wintery image is drawn by me.
             </p>
-            <button type="button" class="btn btn-primary" onclick="goFullScreen(document.getElementById('2'));">
-                Fullscreen here too
-            </button>
-            <iframe id="2" src="https://dzigallerystorage.z6.web.core.windows.net/?category=test%20category%203"
-                    height="600" style="margin:auto;width:100%;"></iframe>
+            <div style="position: relative;">
+                <button type="button" class="dropbtn text-white fsbtn p-1" onclick="goFullScreen(document.getElementById('2'));">
+                    <span class="iconify" data-icon="oi:fullscreen-enter" data-inline="false"></span>
+                </button>
+                <iframe id="2" src="https://dzigallerystorage.z6.web.core.windows.net/?category=test%20category%203"
+                        height="600" style="margin:auto;width:100%;"></iframe>
+            </div>
         </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
 
     <script type="text/javascript" src="main.js"></script>
 </body>
